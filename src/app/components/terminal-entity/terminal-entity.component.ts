@@ -1,4 +1,8 @@
-import { AfterViewChecked, Component, OnInit } from '@angular/core';
+import {
+  AfterViewChecked,
+  Component,
+  OnInit
+} from '@angular/core';
 
 @Component({
   selector: 'app-terminal-entity',
@@ -7,13 +11,17 @@ import { AfterViewChecked, Component, OnInit } from '@angular/core';
 })
 export class TerminalEntityComponent implements OnInit, AfterViewChecked {
 
+  userName: string = "kivork@kivork-2021"
+
   currentCommand = "";
-  output: String[] = [];
+  output: string[] = [];
 
-  constructor() { }
+  commandsHistory: string[] = [];
+  counterForCommandHistory: number = 0;
 
-  ngOnInit(): void {
-  }
+  constructor() {}
+
+  ngOnInit(): void {}
 
   ngAfterViewChecked(): void {
     const objDiv = document.getElementById("body");
@@ -21,13 +29,46 @@ export class TerminalEntityComponent implements OnInit, AfterViewChecked {
   }
 
   keydownEvent(event: KeyboardEvent) {
-    
+
     if (event.code == "Enter" || event.code == "NumpadEnter") {
-      if (this.currentCommand) {
-        this.output.push(this.currentCommand);
-        this.currentCommand = "";
-      }
-      
+      this.addCommand();
+      this.writeToOutput();
+      this.clearInput();
     }
+
+    if (event.code == "ArrowUp") {
+      if (this.counterForCommandHistory > 0) { 
+        this.currentCommand = this.commandsHistory[this.counterForCommandHistory - 1];
+        this.counterForCommandHistory--;
+      }
+    }
+
+    if (event.code == "ArrowDown") {
+      if (this.counterForCommandHistory < this.commandsHistory.length) {
+        this.currentCommand = this.commandsHistory[this.counterForCommandHistory];
+        this.counterForCommandHistory++;
+      }
+    }
+  }
+
+  addCommand() {
+    if (this.commandsHistory.length > 0 && this.currentCommand.trim()) {
+      if (this.currentCommand.trim() !== this.commandsHistory[this.commandsHistory.length - 1]) {
+        this.commandsHistory.push(this.currentCommand.trim());
+      }
+    } else {
+      if (this.currentCommand.trim()) {
+        this.commandsHistory.push(this.currentCommand.trim());
+      }
+    }
+    this.counterForCommandHistory = this.commandsHistory.length;
+  }
+
+  clearInput() {
+    this.currentCommand = "";
+  }
+
+  writeToOutput() {
+    this.output.push(this.userName + ":~$ " + this.currentCommand);
   }
 }
