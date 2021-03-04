@@ -1,0 +1,28 @@
+<div class="terminal">
+    <div class="terminal__header">
+        <span class="terminal__header--el">Cursor</span>
+        <span class="terminal__header--el">Background-color</span>
+        <span class="terminal__header--el">Text-color</span>
+        <span class="terminal__header--el">Text-size</span>
+        <!-- <span class="terminal__header--el">+ New Terminal</span> -->
+    </div>
+    <div class="terminal__body" id="body">
+        <div>
+            <div *ngFor="let el of output" class="body-output">
+                {{el}}
+            </div>
+        </div>
+        <div class="body-input">
+            <span class="body-input__main-root">kivork@kivork-2020</span>
+            <span class="body-input--symbols">:</span>
+            <span class="body-input--symbols">~</span>
+            <span class="body-input--symbols">$</span>
+            <input
+                autofocus
+                [(ngModel)]="currentCommand" 
+                class="body-input__input-field"
+                (keydown)="keydownEvent($event)"
+                >
+        </div>
+    </div>
+</div>
