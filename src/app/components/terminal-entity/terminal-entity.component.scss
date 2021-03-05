@@ -65,4 +65,14 @@
         background-color: rgb(29, 29, 29);
         color: #fff;
     }
+
+    &__input-field::spelling-error {
+        display: none;
+    }
+
+    &__input-field::grammar-error {
+        display: none;
+    }
+
+
 }
