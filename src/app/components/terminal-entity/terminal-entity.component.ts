@@ -15,7 +15,14 @@ import { OpenWeatherMapHttpService } from '../../servicies';
 })
 export class TerminalEntityComponent implements OnInit, AfterViewChecked {
 
-  userName: string = "kivork@kivork-2021"
+  userName: string = "kivork@kivork-2021";
+
+  preferences = {
+    // cursor: "black",
+    backgroundColor: "rgb(29, 29, 29)",
+    textColor: "#fff",
+    textSize: 16,
+  }
 
   currentCommand = "";
   output: string[] = [];
@@ -25,21 +32,57 @@ export class TerminalEntityComponent implements OnInit, AfterViewChecked {
 
   constructor(
     private _httpService: OpenWeatherMapHttpService,
-  ) {}
+  ) {
+      this.output.push("This is a Technical Task provided by Kivork 2021!");
+      this.output.push("Welcome to this awesome terminal!");
+      this.output.push("What can you do here? :D");
+      this.output.push(" ");
+      this.output.push("Get current weather measurements by city name:");
+      this.output.push("    -type    weather <cityName>");
+      this.output.push(" ");
+      this.output.push("Clear the screen:");
+      this.output.push("    -type    clear");
+      this.output.push(" ");
+      this.output.push("Get help:");
+      this.output.push("    -type    help");
+  }
 
   ngOnInit(): void {
+
     if (sessionStorage.getItem("autosave")) {
       let autosave = JSON.parse(sessionStorage.getItem('autosave'));
       this.currentCommand = autosave.currCmd;
       this.output = autosave.output;
       this.commandsHistory = autosave.cmdsHistory;
       this.counterForCommandHistory = autosave.counter;
+      this.preferences.textSize = autosave.textSize;
+      this.preferences.textColor = autosave.textColor;
+      this.preferences.backgroundColor = autosave.backgroundColor;
     }
+
+    this.setBgColor(this.preferences.backgroundColor);
+    this.setTextColor(this.preferences.textColor);
+    this.setTextSize();
+
+    const terminal = document.getElementById("terminal");
+    const input = document.getElementById('input');
+
+    terminal.addEventListener('mouseover', () => {
+      input.focus();
+    });
+
+    terminal.addEventListener('click', () => {
+      input.focus();
+    });
+    
   }
 
   ngAfterViewChecked(): void {
     const objDiv = document.getElementById("body");
     objDiv.scrollTop = objDiv.scrollHeight;
+
+    this.setTextColor(this.preferences.textColor);
+    this.setTextSize();
   }
 
   handleCommand() {
@@ -51,14 +94,33 @@ export class TerminalEntityComponent implements OnInit, AfterViewChecked {
         case "weather":
           this.weatherCmnds(parsedInput[1]);
           break;
+        case "clear":
+          this.output = [];
+          break;
+        case "help":
+          this.showHelpMessage();
+          break;
         default:
           this.output.push(this.currentCommand + ": Command not found");
       }
     } else {
       return;
     }
+  }
 
-    
+  showHelpMessage() {
+      this.output.push("This is a Technical Task provided by Kivork 2021!");
+      this.output.push("Welcome to this awesome terminal!");
+      this.output.push("What can you do here? :D");
+      this.output.push(" ");
+      this.output.push("Get current weather measurements by city name:");
+      this.output.push("    -type    weather <cityName>");
+      this.output.push(" ");
+      this.output.push("Clear the screen:");
+      this.output.push("    -type    clear");
+      this.output.push(" ");
+      this.output.push("Get help:");
+      this.output.push("    -type    help");
   }
 
   keydownEvent(event: KeyboardEvent) {
@@ -91,27 +153,56 @@ export class TerminalEntityComponent implements OnInit, AfterViewChecked {
       currCmd: this.currentCommand,
       output: this.output,
       cmdsHistory: this.commandsHistory,
-      counter: this.counterForCommandHistory
+      counter: this.counterForCommandHistory,
+      textColor: this.preferences.textColor,
+      backgroundColor: this.preferences.backgroundColor,
+      textSize: this.preferences.textSize
     };
 
     sessionStorage.setItem("autosave", JSON.stringify(autosave));
   }
 
   weatherCmnds(city: string) {
-
-    setTimeout(() => {
-      this._httpService.getWeatherByName(city).pipe(
-        tap((resp) =>{
-          console.log(resp);
-          this.output.push("Country: " + resp.sys.country);
-          this.output.push("City: " + resp.name);
-          this.output.push("Temperature: " + resp.main.temp + "C")
-          this.output.push("Description: " + resp.weather[0].description)
-        })
-      ).subscribe()
-    }, 1000);
-    
+  if(city) {
+    this._httpService.getWeatherByName(city).subscribe((resp) => {
+      this.output.push("  ");
+      this.output.push("Country: " + resp.sys.country);
+      this.output.push("City: " + resp.name);
+      this.output.push("Temperature: " + resp.main.temp + "C");
+      this.output.push("Description: " + resp.weather[0].description);
+      this.output.push("  ");
+    }, err => {
+      this.output.push("  ");
+      this.output.push("    Oooops! " + err.error.message);
+      this.output.push("  ");
+    });
+  } else {
+    this.output.push("    -type   weather <command>");
   }
+    
+    // if (city) {
+
+
+    // setTimeout(() => {
+    //   this._httpService.getWeatherByName(city).pipe(
+    //     tap((resp) =>{
+    //       console.log(resp);
+    //       if(resp.cod != 200) {
+    //         this.output.push(" Oooops! " + resp.message);
+    //       } else {
+            
+    //         this.output.push("Country: " + resp.sys.country);
+    //         this.output.push("City: " + resp.name);
+    //         this.output.push("Temperature: " + resp.main.temp + "C");
+    //         this.output.push("Description: " + resp.weather[0].description);
+    //       }
+    //     })
+    //   ).subscribe(res => console.log(res)); 
+    // }, 700);
+      // } else {
+      //   this.output.push("    -type   weather <command>");
+      // }
+    }
 
   addCommand() {
     if (this.commandsHistory.length > 0 && this.currentCommand.trim()) {
@@ -133,4 +224,52 @@ export class TerminalEntityComponent implements OnInit, AfterViewChecked {
   writeToOutput() {
     this.output.push(this.userName + ":~$ " + this.currentCommand);
   }
+
+  setBgColor(color: string) {
+    this.preferences.backgroundColor = color;
+
+    document.getElementById('body').style.backgroundColor = color;
+    document.getElementById('input').style.backgroundColor = color;
+    this.saveToSessionStorage();
+  }
+
+  setTextColor(color: string) {
+    this.preferences.textColor = color;
+    
+    const spans = document.getElementsByClassName('output') as HTMLCollectionOf<HTMLElement>;
+    for (let i = 0; i < spans.length; i++) {
+      spans[i].style.color = this.preferences.textColor;
+    }
+
+    const symbols = document.getElementsByClassName('body-input--symbols') as HTMLCollectionOf<HTMLElement>;
+    for (let i = 0; i < symbols.length; i++) {
+      symbols[i].style.color = this.preferences.textColor;
+    }
+
+    document.getElementById('input').style.color = this.preferences.textColor;
+    this.saveToSessionStorage();
+  }
+
+  setTextSize(cmd?: string) {
+    if(cmd == "+") {
+      this.preferences.textSize++;
+    } 
+    if(cmd == "-") {
+      this.preferences.textSize--;
+    }
+
+      const spans = document.getElementsByClassName('output') as HTMLCollectionOf<HTMLElement>;
+        for (let i = 0; i < spans.length; i++) {
+          spans[i].style.fontSize = this.preferences.textSize + "px";
+      }
+
+      const symbols = document.getElementsByClassName('body-input--symbols') as HTMLCollectionOf<HTMLElement>;
+       for (let i = 0; i < symbols.length; i++) {
+        symbols[i].style.fontSize = this.preferences.textSize + "px";
+      }
+      document.getElementById('input').style.fontSize = this.preferences.textSize + "px";
+      document.getElementById('root').style.fontSize = this.preferences.textSize + "px"; 
+      
+      this.saveToSessionStorage();
+    }
 }

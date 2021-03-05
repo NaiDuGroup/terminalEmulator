@@ -1,23 +1,51 @@
-<div class="terminal">
+<div id="terminal" class="terminal">
     <div class="terminal__header">
         <span class="terminal__header--el">Cursor</span>
+        <span>|</span>
         <span class="terminal__header--el">Background-color</span>
+        <div class="color-pallete">
+            <div class="color-pallete--red" (click)="setBgColor('red')"></div>
+            <div class="color-pallete--black" (click)="setBgColor('black')"></div>
+            <div class="color-pallete--blue" (click)="setBgColor('blue')"></div>
+            <div class="color-pallete--green" (click)="setBgColor('green')"></div>
+            <div class="color-pallete--white" (click)="setBgColor('white')"></div>
+            <div class="color-pallete--orange" (click)="setBgColor('orange')"></div>
+        </div>
+        <span>|</span>
         <span class="terminal__header--el">Text-color</span>
+        <div class="color-pallete">
+            <div class="color-pallete--red" (click)="setTextColor('red')"></div>
+            <div class="color-pallete--black" (click)="setTextColor('black')"></div>
+            <div class="color-pallete--blue" (click)="setTextColor('blue')"></div>
+            <div class="color-pallete--green" (click)="setTextColor('green')"></div>
+            <div class="color-pallete--white" (click)="setTextColor('white')"></div>
+            <div class="color-pallete--orange" (click)="setTextColor('orange')"></div>
+        </div>
+        <span>|</span>
         <span class="terminal__header--el">Text-size</span>
+        <div class="font-size-panel">
+            <span class="font-size-panel__el" (click)="setTextSize('+')">+</span>
+            <span class="font-size-panel__el" (click)="setTextSize('-')">-</span>
+        </div>
+        <span>|</span>
         <!-- <span class="terminal__header--el">+ New Terminal</span> -->
     </div>
     <div class="terminal__body" id="body">
         <div>
             <div *ngFor="let el of output" class="body-output">
-                {{el}}
+                <span class="output">{{el}}</span>
             </div>
         </div>
         <div class="body-input">
-            <span class="body-input__main-root">{{userName}}</span>
-            <span class="body-input--symbols">:</span>
-            <span class="body-input--symbols">~</span>
-            <span class="body-input--symbols">$</span>
+            <span id="root" class="body-input__main-root">{{userName}}</span>
+            <div>
+                <span class="body-input--symbols">:</span>
+                <span class="body-input--symbols">~</span>
+                <span class="body-input--symbols">$</span>
+            </div>
             <input
+                id="input"
+                spellcheck="false"
                 autofocus
                 [(ngModel)]="currentCommand" 
                 class="body-input__input-field"

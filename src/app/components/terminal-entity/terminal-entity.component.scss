@@ -1,78 +1,130 @@
 .terminal {
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background-color: #585858;
+    height: 4vh;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+    color: #fff;
+    font-size: 18px;
 
-    &__header {
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-        background-color: #585858;
-        height: 4vh;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        font-family: 'Yanone Kaffeesatz', sans-serif;
-        color: #fff;
-        font-size: 18px;
-
-        &--el {
-            margin: 0px 5px;
-            cursor: pointer;
-        }
-
-        &--el:hover {
-            color: rgb(253, 185, 185);
-        }
+    &--el {
+      margin: 0px 5px;
+      cursor: auto;
     }
+  }
 
-    &__body {
-        height: 93vh;
-        background-color: rgb(29, 29, 29);
-        overflow-y: auto;
-        line-height: 1.5em;
-        border-bottom-left-radius: 10px;
-        border-bottom-right-radius: 10px;
+  &__body {
+    height: 93vh;
+    background-color: rgb(29, 29, 29);
+    overflow-y: auto;
+    line-height: 1.5em;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+}
+
+
+.color-pallete {
+  display: flex;
+  flex-direction: row;
+
+  &--red {
+    background-color: red;
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0px 2px;
+  }
+
+  &--black {
+    background-color: black;
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0px 2px;
+  }
+
+  &--blue {
+    background-color: blue;
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0px 2px;
+  }
+
+  &--green {
+    background-color: green;
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0px 2px;
+  }
+
+  &--white {
+    background-color: white;
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0px 2px;
+  }
+
+  &--orange {
+    background-color: orange;
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0px 2px;
+  }
+}
+
+.font-size-panel {
+    display: flex;
+
+    &__el {
+        margin: 0px 5px;
+        cursor: pointer;
     }
 }
 
+
 .body-output {
-    color: #fff;
-    margin: 0px 4px;
-    font-family: 'Source Sans Pro', sans-serif;
+  color: #fff;
+  margin: 0px 4px;
+  font-family: 'Source Sans Pro', sans-serif;
+  white-space: pre;
 }
 
 .body-input {
-    display: flex;
-    flex-direction: row;
-    margin: 0px 4px;
-    font-family: 'Source Sans Pro', sans-serif;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  margin: 0px 4px;
+  font-family: 'Source Sans Pro', sans-serif;
     padding-bottom: 10px;
 
-    &__main-root {
-        color: chartreuse;
-    }
+  &__main-root {
+    color: chartreuse;
+  }
 
-    &--symbols {
-        color: #fff;
-    }
+  &--symbols {
+    color: #fff;
+  }
 
-    &__input-field {
-        margin-left: 1px;
-        font-family: 'Source Sans Pro', sans-serif;
-        font-size: 16px;
-        flex: 1 1 0%;
-        border: none;
-        outline: none;
-        background-color: rgb(29, 29, 29);
-        color: #fff;
-    }
-
-    &__input-field::spelling-error {
-        display: none;
-    }
-
-    &__input-field::grammar-error {
-        display: none;
-    }
-
-
+  &__input-field {
+    margin-left: 1px;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 16px;
+    flex: 1 1 0%;
+    border: none;
+    outline: none;
+    background-color: rgb(29, 29, 29);
+    color: #fff;
+  }
 }
