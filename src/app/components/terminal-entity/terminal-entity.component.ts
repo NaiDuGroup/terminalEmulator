@@ -1,10 +1,4 @@
-import { stringify } from '@angular/compiler/src/util';
-import {
-  AfterViewChecked,
-  Component,
-  OnInit
-} from '@angular/core';
-import { tap } from 'rxjs/operators';
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
 
 import { OpenWeatherMapHttpService } from '../../servicies';
 
@@ -33,18 +27,18 @@ export class TerminalEntityComponent implements OnInit, AfterViewChecked {
   constructor(
     private _httpService: OpenWeatherMapHttpService,
   ) {
-      this.output.push("This is a Technical Task provided by Kivork 2021!");
-      this.output.push("Welcome to this awesome terminal!");
-      this.output.push("What can you do here? :D");
-      this.output.push(" ");
-      this.output.push("Get current weather measurements by city name:");
-      this.output.push("    -type    weather <cityName>");
-      this.output.push(" ");
-      this.output.push("Clear the screen:");
-      this.output.push("    -type    clear");
-      this.output.push(" ");
-      this.output.push("Get help:");
-      this.output.push("    -type    help");
+    this.output.push("This is a Technical Task provided by Kivork 2021!");
+    this.output.push("Welcome to this awesome terminal!");
+    this.output.push("What can you do here? :D");
+    this.output.push(" ");
+    this.output.push("Get current weather measurements by city name:");
+    this.output.push("        weather <cityName>");
+    this.output.push(" ");
+    this.output.push("Clear the screen:");
+    this.output.push("        clear");
+    this.output.push(" ");
+    this.output.push("Get help:");
+    this.output.push("        help");
   }
 
   ngOnInit(): void {
@@ -67,14 +61,14 @@ export class TerminalEntityComponent implements OnInit, AfterViewChecked {
     const terminal = document.getElementById("terminal");
     const input = document.getElementById('input');
 
-    terminal.addEventListener('mouseover', () => {
+    document.addEventListener('mouseover', () => {
       input.focus();
     });
 
-    terminal.addEventListener('click', () => {
+    document.addEventListener('click', () => {
       input.focus();
     });
-    
+
   }
 
   ngAfterViewChecked(): void {
@@ -90,7 +84,7 @@ export class TerminalEntityComponent implements OnInit, AfterViewChecked {
     if (this.currentCommand.trim()) {
       let parsedInput = this.currentCommand.toLowerCase().trim().replace(/\s+/g, ' ').split(' ');
 
-      switch(parsedInput[0]) {
+      switch (parsedInput[0]) {
         case "weather":
           this.weatherCmnds(parsedInput[1]);
           break;
@@ -109,18 +103,18 @@ export class TerminalEntityComponent implements OnInit, AfterViewChecked {
   }
 
   showHelpMessage() {
-      this.output.push("This is a Technical Task provided by Kivork 2021!");
-      this.output.push("Welcome to this awesome terminal!");
-      this.output.push("What can you do here? :D");
-      this.output.push(" ");
-      this.output.push("Get current weather measurements by city name:");
-      this.output.push("    -type    weather <cityName>");
-      this.output.push(" ");
-      this.output.push("Clear the screen:");
-      this.output.push("    -type    clear");
-      this.output.push(" ");
-      this.output.push("Get help:");
-      this.output.push("    -type    help");
+    this.output.push("This is a Technical Task provided by Kivork 2021!");
+    this.output.push("Welcome to this awesome terminal!");
+    this.output.push("What can you do here? :D");
+    this.output.push(" ");
+    this.output.push("Get current weather measurements by city name:");
+    this.output.push("        weather <cityName>");
+    this.output.push(" ");
+    this.output.push("Clear the screen:");
+    this.output.push("        clear");
+    this.output.push(" ");
+    this.output.push("Get help:");
+    this.output.push("        help");
   }
 
   keydownEvent(event: KeyboardEvent) {
@@ -133,10 +127,11 @@ export class TerminalEntityComponent implements OnInit, AfterViewChecked {
     }
 
     if (event.code == "ArrowUp") {
-      if (this.counterForCommandHistory > 0) { 
+      if (this.counterForCommandHistory > 0) {
         this.currentCommand = this.commandsHistory[this.counterForCommandHistory - 1];
         this.counterForCommandHistory--;
       }
+      this.moveCaretToEnd(document.getElementById('input'));
     }
 
     if (event.code == "ArrowDown") {
@@ -145,6 +140,7 @@ export class TerminalEntityComponent implements OnInit, AfterViewChecked {
         this.counterForCommandHistory++;
       }
     }
+
   }
 
 
@@ -163,46 +159,23 @@ export class TerminalEntityComponent implements OnInit, AfterViewChecked {
   }
 
   weatherCmnds(city: string) {
-  if(city) {
-    this._httpService.getWeatherByName(city).subscribe((resp) => {
-      this.output.push("  ");
-      this.output.push("Country: " + resp.sys.country);
-      this.output.push("City: " + resp.name);
-      this.output.push("Temperature: " + resp.main.temp + "C");
-      this.output.push("Description: " + resp.weather[0].description);
-      this.output.push("  ");
-    }, err => {
-      this.output.push("  ");
-      this.output.push("    Oooops! " + err.error.message);
-      this.output.push("  ");
-    });
-  } else {
-    this.output.push("    -type   weather <command>");
-  }
-    
-    // if (city) {
-
-
-    // setTimeout(() => {
-    //   this._httpService.getWeatherByName(city).pipe(
-    //     tap((resp) =>{
-    //       console.log(resp);
-    //       if(resp.cod != 200) {
-    //         this.output.push(" Oooops! " + resp.message);
-    //       } else {
-            
-    //         this.output.push("Country: " + resp.sys.country);
-    //         this.output.push("City: " + resp.name);
-    //         this.output.push("Temperature: " + resp.main.temp + "C");
-    //         this.output.push("Description: " + resp.weather[0].description);
-    //       }
-    //     })
-    //   ).subscribe(res => console.log(res)); 
-    // }, 700);
-      // } else {
-      //   this.output.push("    -type   weather <command>");
-      // }
+    if (city) {
+      this._httpService.getWeatherByName(city).subscribe((resp) => {
+        this.output.push("  ");
+        this.output.push("Country: " + resp.sys.country);
+        this.output.push("City: " + resp.name);
+        this.output.push("Temperature: " + resp.main.temp + "C");
+        this.output.push("Description: " + resp.weather[0].description);
+        this.output.push("  ");
+      }, err => {
+        this.output.push("  ");
+        this.output.push("    Oooops! " + err.error.message);
+        this.output.push("  ");
+      });
+    } else {
+      this.output.push("    -type   weather <command>");
     }
+  }
 
   addCommand() {
     if (this.commandsHistory.length > 0 && this.currentCommand.trim()) {
@@ -235,13 +208,13 @@ export class TerminalEntityComponent implements OnInit, AfterViewChecked {
 
   setTextColor(color: string) {
     this.preferences.textColor = color;
-    
-    const spans = document.getElementsByClassName('output') as HTMLCollectionOf<HTMLElement>;
+
+    const spans = document.getElementsByClassName('output') as HTMLCollectionOf < HTMLElement > ;
     for (let i = 0; i < spans.length; i++) {
       spans[i].style.color = this.preferences.textColor;
     }
 
-    const symbols = document.getElementsByClassName('body-input--symbols') as HTMLCollectionOf<HTMLElement>;
+    const symbols = document.getElementsByClassName('body-input--symbols') as HTMLCollectionOf < HTMLElement > ;
     for (let i = 0; i < symbols.length; i++) {
       symbols[i].style.color = this.preferences.textColor;
     }
@@ -250,26 +223,37 @@ export class TerminalEntityComponent implements OnInit, AfterViewChecked {
     this.saveToSessionStorage();
   }
 
-  setTextSize(cmd?: string) {
-    if(cmd == "+") {
+  setTextSize(cmd ? : string) {
+    if (cmd == "+") {
       this.preferences.textSize++;
-    } 
-    if(cmd == "-") {
+    }
+    if (cmd == "-") {
       this.preferences.textSize--;
     }
 
-      const spans = document.getElementsByClassName('output') as HTMLCollectionOf<HTMLElement>;
-        for (let i = 0; i < spans.length; i++) {
-          spans[i].style.fontSize = this.preferences.textSize + "px";
-      }
-
-      const symbols = document.getElementsByClassName('body-input--symbols') as HTMLCollectionOf<HTMLElement>;
-       for (let i = 0; i < symbols.length; i++) {
-        symbols[i].style.fontSize = this.preferences.textSize + "px";
-      }
-      document.getElementById('input').style.fontSize = this.preferences.textSize + "px";
-      document.getElementById('root').style.fontSize = this.preferences.textSize + "px"; 
-      
-      this.saveToSessionStorage();
+    const spans = document.getElementsByClassName('output') as HTMLCollectionOf < HTMLElement > ;
+    for (let i = 0; i < spans.length; i++) {
+      spans[i].style.fontSize = this.preferences.textSize + "px";
     }
+
+    const symbols = document.getElementsByClassName('body-input--symbols') as HTMLCollectionOf < HTMLElement > ;
+    for (let i = 0; i < symbols.length; i++) {
+      symbols[i].style.fontSize = this.preferences.textSize + "px";
+    }
+    document.getElementById('input').style.fontSize = this.preferences.textSize + "px";
+    document.getElementById('root').style.fontSize = this.preferences.textSize + "px";
+
+    this.saveToSessionStorage();
+  }
+
+  moveCaretToEnd(el) {
+    if (typeof el.selectionStart == "number") {
+      el.selectionStart = el.selectionEnd = 99;
+    } else if (typeof el.createTextRange != "undefined") {
+      el.focus();
+      const range = el.createTextRange();
+      range.collapse(false);
+      range.select();
+    }
+  }
 }
