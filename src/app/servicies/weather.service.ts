@@ -15,16 +15,26 @@ export class WeatherService {
     const event = new Subject<{}>();
 
     setTimeout(() => {
-      event.next({ line: "Sending request ..." });
+      event.next({ line: "Sending request ." });
     }, 100);
 
     setTimeout(() => {
-      event.next({ line: "Receiving response ...", newLine: false });
+      event.next({ line: "Sending request ..", newLine: false });
+    }, 1000);
+
+
+    setTimeout(() => {
+      event.next({ line: "Sending request ...", newLine: false });
+    }, 2000);
+
+    setTimeout(() => {
+      event.next({ line: " ", newLine: false  });
+      event.next({ line: "Receiving response ..."});
     }, 5000);
 
     setTimeout(() => { 
       this._httpWeatherService.getWeatherByCityName(cityName).subscribe((response) => {
-        event.next({ line: " ", newLine: false });
+        event.next({ line: " " });
         event.next({ line: "Country: " + response.sys.country });
         event.next({ line: "City: " + response.name });
         event.next({ line: "Temperature: " + response.main.temp + "C" });
@@ -32,7 +42,7 @@ export class WeatherService {
         event.next({ line: " "});
       }, err => {
         event.next({ line: " ", newLine: false });
-        event.next({ line: "        Oooops! " + err.error.message });
+        event.next({ line: "        Oooops! " + err.error.message + "." });
         event.next({ line: " " });
       });
     }, 7500);

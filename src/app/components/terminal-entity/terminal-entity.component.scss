@@ -16,77 +16,58 @@
 
     &--el {
       margin: 0px 5px;
-      cursor: auto;
+      cursor: pointer;
     }
   }
 
   &__body {
-    height: 93vh;
-    background-color: rgb(29, 29, 29);
+    height: 70vh; //93
+    background-color: black;
     overflow-y: scroll;
-    line-height: 1.5em;
+    line-height: 1.8em;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
   }
 }
 
-
-.color-pallete {
-  display: flex;
-  flex-direction: row;
-
-  &--red {
-    background-color: red;
-    cursor: pointer;
-    height: 15px;
-    width: 15px;
-    margin: 0px 2px;
-  }
-
-  &--black {
-    background-color: black;
-    cursor: pointer;
-    height: 15px;
-    width: 15px;
-    margin: 0px 2px;
-  }
-
-  &--blue {
-    background-color: blue;
-    cursor: pointer;
-    height: 15px;
-    width: 15px;
-    margin: 0px 2px;
-  }
-
-  &--green {
-    background-color: green;
-    cursor: pointer;
-    height: 15px;
-    width: 15px;
-    margin: 0px 2px;
-  }
-
-  &--white {
-    background-color: white;
-    cursor: pointer;
-    height: 15px;
-    width: 15px;
-    margin: 0px 2px;
-  }
-
-  &--orange {
-    background-color: orange;
-    cursor: pointer;
-    height: 15px;
-    width: 15px;
-    margin: 0px 2px;
-  }
+.dropbtn {
+  cursor: pointer;
+  background-color: #585858;
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+  color: #fff;
+  font-size: 18px;
 }
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 50px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: #fff;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+  background-color: #585858;
+}
+
+.dropdown-content a:hover {background-color: #373636;}
+.dropdown:hover .dropdown-content {display: block;}
+
 
 .font-size-panel {
     display: flex;
-
+    
     &__el {
         margin: 0px 5px;
         cursor: pointer;
@@ -124,6 +105,5 @@
     flex: 1 1 0%;
     border: none;
     outline: none;
-    background-color: transparent;
   }
 }

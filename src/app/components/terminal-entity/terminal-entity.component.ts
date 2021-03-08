@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 
 import { HelpService, WeatherService } from '../../servicies';
 
@@ -9,14 +9,15 @@ import { HelpService, WeatherService } from '../../servicies';
   providers: [ WeatherService, HelpService ]
 })
 export class TerminalEntityComponent implements OnInit, AfterViewInit {
+  @Input() sessionNum: number;
   @ViewChildren('output') private _output: QueryList<any>;
   @ViewChild('content') private _content: ElementRef;
 
   userName: string = "kivork@kivork-2021";
 
   preferences = {
-    // cursor: "black",
-    backgroundColor: "#1d1d1d",
+    cursor: "#fff",
+    backgroundColor: "#000",
     textColor: "#fff",
     textSize: 16,
   }
@@ -50,17 +51,20 @@ export class TerminalEntityComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    if (sessionStorage.getItem("autosave")) {
-      let autosave = JSON.parse(sessionStorage.getItem('autosave'));
+
+    if (sessionStorage.getItem("autosave" + this.sessionNum)) {
+      let autosave = JSON.parse(sessionStorage.getItem("autosave" + this.sessionNum));
       this.inputValue = autosave.currCmd;
       this.output = autosave.output;
       this.commandsHistory = autosave.cmdsHistory;
       this.counterForCommandHistory = autosave.counter;
+      this.preferences.cursor = autosave.cursor;
       this.preferences.textSize = autosave.textSize;
       this.preferences.textColor = autosave.textColor;
       this.preferences.backgroundColor = autosave.backgroundColor;
     }
 
+    this.setCaretColor(this.preferences.cursor);
     this.setBgColor(this.preferences.backgroundColor);
     this.setTextColor(this.preferences.textColor);
     this.setTextSize();
@@ -78,7 +82,12 @@ export class TerminalEntityComponent implements OnInit, AfterViewInit {
     
   }
 
+  mouseEvent(event: MouseEvent): void {
+    event.preventDefault();
+  }
+
   keydownEvent(event: KeyboardEvent): void {
+    
     if (event.code == "Enter" || event.code == "NumpadEnter") {
       this._addCommandToHistory();
       this.commandInProgress += this.inputValue;
@@ -90,18 +99,17 @@ export class TerminalEntityComponent implements OnInit, AfterViewInit {
     }
 
     if (event.code == "ArrowUp") {
-      console.log(event);
       event.preventDefault();
       if (this.counterForCommandHistory > 0) {
-        this.inputValue = this.commandsHistory[this.counterForCommandHistory - 1];
+        this.inputValue = this.commandsHistory[this.counterForCommandHistory - 1 ];
         this.counterForCommandHistory--;
-      }
+      } 
     }
 
     if (event.code == "ArrowDown") {
       event.preventDefault();
       if (this.counterForCommandHistory < this.commandsHistory.length) {
-        this.inputValue = this.commandsHistory[this.counterForCommandHistory];
+        this.inputValue = this.commandsHistory[this.counterForCommandHistory + 1 ];
         this.counterForCommandHistory++;
       }
     }    
@@ -163,12 +171,13 @@ export class TerminalEntityComponent implements OnInit, AfterViewInit {
       output: this.output,
       cmdsHistory: this.commandsHistory,
       counter: this.counterForCommandHistory,
+      cursor: this.preferences.cursor,
       textColor: this.preferences.textColor,
       backgroundColor: this.preferences.backgroundColor,
       textSize: this.preferences.textSize
     };
 
-    sessionStorage.setItem("autosave", JSON.stringify(autosave));
+    sessionStorage.setItem("autosave" + this.sessionNum, JSON.stringify(autosave));
   }
 
   private _addCommandToHistory(): void {
@@ -203,9 +212,14 @@ export class TerminalEntityComponent implements OnInit, AfterViewInit {
     this.output.push(line);
   }
 
+  setCaretColor(color: string): void {
+    this.preferences.cursor = color;
+    document.getElementById('input').style.caretColor = this.preferences.cursor;
+    this._saveToSessionStorage();
+  }
+
   setBgColor(color: string): void {
     this.preferences.backgroundColor = color;
-
     document.getElementById('body').style.backgroundColor = color;
     document.getElementById('input').style.backgroundColor = color;
     this._saveToSessionStorage();
@@ -229,11 +243,11 @@ export class TerminalEntityComponent implements OnInit, AfterViewInit {
   }
 
   setTextSize(cmd ? : string): void {
-    if (cmd == "+") {
-      this.preferences.textSize++;
-    }
-    if (cmd == "-") {
+    if (cmd == "-" && this.preferences.textSize > 10) {
       this.preferences.textSize--;
+    }
+    if (cmd == "+" && this.preferences.textSize < 40) {
+      this.preferences.textSize++;
     }
 
     const spans = document.getElementsByClassName('output') as HTMLCollectionOf < HTMLElement > ;
@@ -256,20 +270,4 @@ export class TerminalEntityComponent implements OnInit, AfterViewInit {
       this._content.nativeElement.scrollTop = this._content.nativeElement.scrollHeight;
     } catch (err) {}
   }
-
-  // hideInputPanel() { 
-  //   const symbols = document.getElementsByClassName('body-input--symbols') as HTMLCollectionOf < HTMLElement > ;
-  //   for (let i = 0; i < symbols.length; i++) {
-  //     symbols[i].style.color = this.preferences.backgroundColor;
-  //   }
-  //   document.getElementById('root').style.color = this.preferences.backgroundColor;
-  // }
-
-  // showInputPanel() {
-  //   const symbols = document.getElementsByClassName('body-input--symbols') as HTMLCollectionOf < HTMLElement > ;
-  //   for (let i = 0; i < symbols.length; i++) {
-  //     symbols[i].style.color = this.preferences.textColor;
-  //   }
-  //   document.getElementById('root').style.color = "chartreuse";
-  // }
 }
