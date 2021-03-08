@@ -14,7 +14,7 @@ export class OpenWeatherMapHttpService {
     private _http: HttpClient
   ) { }
 
-  getWeatherByName(city: string): Observable<any> {
+  getWeatherByCityName(city: string): Observable<any> {
     return this._http.get<Observable<any>>(apiWeatherMapGetWeatherByCityName(), {
       params: {
         q: city.toString(),

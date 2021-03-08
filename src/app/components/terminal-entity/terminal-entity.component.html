@@ -30,24 +30,32 @@
         <span>|</span>
         <!-- <span class="terminal__header--el">+ New Terminal</span> -->
     </div>
-    <div class="terminal__body" id="body">
+    <div #content class="terminal__body" id="body">
         <div>
-            <div *ngFor="let el of output" class="body-output">
+            <div #output *ngFor="let el of output" class="body-output">
                 <span class="output">{{el}}</span>
             </div>
         </div>
         <div class="body-input">
-            <span id="root" class="body-input__main-root">{{userName}}</span>
-            <div>
+            <span [ngStyle]="{'visibility' :!_isCommandInProgress ? 'visible' : 'hidden'}" 
+                id="root" 
+                class="body-input__main-root">
+                    {{userName}}
+                </span>
+            
+                <!-- <div [ngStyle]="{'visibility' :!isCurrentCommandInProgress ? 'visible' : 'hidden'}"></div> -->
+            <div [ngStyle]="{'visibility' :!_isCommandInProgress ? 'visible' : 'hidden'}">
                 <span class="body-input--symbols">:</span>
                 <span class="body-input--symbols">~</span>
                 <span class="body-input--symbols">$</span>
             </div>
-            <input
+            <!-- [ngStyle]="{'color' :!_isCommandInProgress ? 'this.preferences.textColor' : 'red'}" -->
+            <input [ngStyle]="{'color' :!_isCommandInProgress ? 'preferences.textColor' : 'transparent'}"
                 id="input"
                 spellcheck="false"
+                onblur="this.focus()"
                 autofocus
-                [(ngModel)]="currentCommand" 
+                [(ngModel)]="inputValue" 
                 class="body-input__input-field"
                 (keydown)="keydownEvent($event)"
                 >
