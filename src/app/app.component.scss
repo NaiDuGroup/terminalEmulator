@@ -1,5 +1,29 @@
 .container {
+    height: 96vh;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
+
+    &__buttons {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        height: 4%;
+        margin: 5px 0px;
+
+        &--btn {
+            width: 49%;
+            border-radius: 5px;
+        }
+    }
+
+    &__terminals {
+        display: flex;
+        flex-direction: row;
+        height: 95%;
+
+        &--entity {
+            margin: 0px 5px;
+            flex: 100%;
+        }
+    }
 }

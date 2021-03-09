@@ -1,12 +1,13 @@
 .terminal {
   display: flex;
   flex-direction: column;
+  height: 100%;
 
   &__header {
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     background-color: #585858;
-    height: 4vh;
+    height: 5%;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -21,8 +22,7 @@
   }
 
   &__body {
-    height: 70vh; //93
-    background-color: black;
+    height: 100%;
     overflow-y: scroll;
     line-height: 1.8em;
     border-bottom-left-radius: 10px;
@@ -48,7 +48,7 @@
   position: absolute;
   background-color: #f1f1f1;
   min-width: 50px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
 
@@ -61,22 +61,25 @@
   background-color: #585858;
 }
 
-.dropdown-content a:hover {background-color: #373636;}
-.dropdown:hover .dropdown-content {display: block;}
+.dropdown-content a:hover {
+  background-color: #373636;
+}
 
-
-.font-size-panel {
-    display: flex;
-    
-    &__el {
-        margin: 0px 5px;
-        cursor: pointer;
-    }
+.dropdown:hover .dropdown-content {
+  display: block;
 }
 
 
+.font-size-panel {
+  display: flex;
+
+  &__el {
+    margin: 0px 5px;
+    cursor: pointer;
+  }
+}
+
 .body-output {
-  color: #fff;
   margin: 0px 4px;
   font-family: 'Source Sans Pro', sans-serif;
   white-space: pre;
@@ -92,10 +95,6 @@
 
   &__main-root {
     color: chartreuse;
-  }
-
-  &--symbols {
-    color: #fff;
   }
 
   &__input-field {

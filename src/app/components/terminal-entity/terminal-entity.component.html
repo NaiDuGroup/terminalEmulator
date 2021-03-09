@@ -1,82 +1,80 @@
-<div id="terminal" class="terminal" (mousedown)="mouseEvent($event)">
-    <div class="terminal__header">
-        <span class="terminal__header--el">
-            <div class="dropdown">
-                <span class="dropbtn">Cursor</span>
-                <div class="dropdown-content">
-                    <a (click)="setCaretColor('red')">RED</a>
-                    <a (click)="setCaretColor('black')">BLACK</a>
-                    <a (click)="setCaretColor('blue')">BLUE</a>
-                    <a (click)="setCaretColor('green')">GREEN</a>
-                    <a (click)="setCaretColor('white')">WHITE</a>
-                    <a (click)="setCaretColor('orange')">ORANGE</a>
-                </div>
-            </div>
-        </span>
-        <span>|</span>
-        <span class="terminal__header--el">
-            <div class="dropdown">
-                <span class="dropbtn">Background-color</span>
-                <div class="dropdown-content">
-                    <a (click)="setBgColor('red')">RED</a>
-                    <a (click)="setBgColor('black')">BLACK</a>
-                    <a (click)="setBgColor('blue')">BLUE</a>
-                    <a (click)="setBgColor('green')">GREEN</a>
-                    <a (click)="setBgColor('white')">WHITE</a>
-                    <a (click)="setBgColor('orange')">ORANGE</a>
-                </div>
-            </div>
-        </span>
-        <span>|</span>
-        <span class="terminal__header--el">
-            <div class="dropdown">
-                <span class="dropbtn">Text-color</span>
-                <div class="dropdown-content">
-                    <a (click)="setTextColor('red')">RED</a>
-                    <a (click)="setTextColor('black')">BLACK</a>
-                    <a (click)="setTextColor('blue')">BLUE</a>
-                    <a (click)="setTextColor('green')">GREEN</a>
-                    <a (click)="setTextColor('white')">WHITE</a>
-                    <a (click)="setTextColor('orange')">ORANGE</a>
-                </div>
-            </div>
-        </span>
-        <span>|</span>
-        <span class="terminal__header--el">Text-size</span>
-        <div class="font-size-panel">
-            <span class="font-size-panel__el" (click)="setTextSize('+')">+</span>
-            <span class="font-size-panel__el" (click)="setTextSize('-')">-</span>
+<div id="terminal{{sessionNum}}" class="terminal" (mousedown)="mouseEvent($event)">
+  <div class="terminal__header">
+    <span class="terminal__header--el">
+      <div class="dropdown">
+        <span class="dropbtn">Cursor</span>
+        <div class="dropdown-content">
+          <a (click)="setCaretColor('red')">RED</a>
+          <a (click)="setCaretColor('black')">BLACK</a>
+          <a (click)="setCaretColor('blue')">BLUE</a>
+          <a (click)="setCaretColor('green')">GREEN</a>
+          <a (click)="setCaretColor('white')">WHITE</a>
+          <a (click)="setCaretColor('orange')">ORANGE</a>
         </div>
-        <span>|</span>
+      </div>
+    </span>
+    <span>|</span>
+    <span class="terminal__header--el">
+      <div class="dropdown">
+        <span class="dropbtn">Background-color</span>
+        <div class="dropdown-content">
+          <a (click)="setBgColor('red')">RED</a>
+          <a (click)="setBgColor('black')">BLACK</a>
+          <a (click)="setBgColor('blue')">BLUE</a>
+          <a (click)="setBgColor('green')">GREEN</a>
+          <a (click)="setBgColor('white')">WHITE</a>
+          <a (click)="setBgColor('orange')">ORANGE</a>
+        </div>
+      </div>
+    </span>
+    <span>|</span>
+    <span class="terminal__header--el">
+      <div class="dropdown">
+        <span class="dropbtn">Text-color</span>
+        <div class="dropdown-content">
+          <a (click)="setTextColor('red')">RED</a>
+          <a (click)="setTextColor('black')">BLACK</a>
+          <a (click)="setTextColor('blue')">BLUE</a>
+          <a (click)="setTextColor('green')">GREEN</a>
+          <a (click)="setTextColor('white')">WHITE</a>
+          <a (click)="setTextColor('orange')">ORANGE</a>
+        </div>
+      </div>
+    </span>
+    <span>|</span>
+    <span class="terminal__header--el">Text-size</span>
+    <div class="font-size-panel">
+      <span class="font-size-panel__el" (click)="setTextSize('+')">+</span>
+      <span class="font-size-panel__el" (click)="setTextSize('-')">-</span>
     </div>
-    <div #content class="terminal__body" id="body">
-        <div>
-            <div #output *ngFor="let el of output" class="body-output">
-                <span class="output">{{el}}</span>
-            </div>
-        </div>
-        <div class="body-input" [ngStyle]="{'opacity' :!_isCommandInProgress ? '1' : '0'}">
-            <span
-                id="root" 
-                class="body-input__main-root">
-                    {{userName}}
-                </span>
-            
-            <div >
-                <span class="body-input--symbols">:</span>
-                <span class="body-input--symbols">~</span>
-                <span class="body-input--symbols">$</span>
-            </div>
-
-            <input
-                spellcheck="false"
-                autofocus
-                onblur="this.focus()"
-                id="input"
-                [(ngModel)]="inputValue" 
-                class="body-input__input-field"
-                (keydown)="keydownEvent($event)"
-                >
-        </div>
+    <span>|</span>
+  </div>
+  <div #content class="terminal__body" [ngStyle]="{
+            'background-color' : preferences.backgroundColor,
+            'font-size' : preferences.textSize + 'px'
+        }">
+    <div>
+      <div #output *ngFor="let el of output" class="body-output">
+        <span class="output" [ngStyle]="{'color' : preferences.textColor }">{{el}}</span>
+      </div>
     </div>
+    <div class="body-input" [ngStyle]="{'opacity' :!isCommandInProgress ? '1' : '0'}">
+      <span [ngStyle]="{'font-size' : preferences.textSize + 'px'}" class="body-input__main-root">
+        {{userName}}
+      </span>
+      <span [ngStyle]="{
+                    'color' : preferences.textColor,
+                    'font-size' : preferences.textSize
+                }">
+        :~$
+      </span>
+      <input id="input{{sessionNum}}" [ngStyle]="{
+            'color' : preferences.textColor, 
+            'caret-color' : preferences.cursor,
+            'background-color' : preferences.backgroundColor,
+            'font-size': preferences.textSize + 'px'
+            }" spellcheck="false" [(ngModel)]="inputValue" class="body-input__input-field"
+        (keydown)="keydownEvent($event)">
+    </div>
+  </div>
 </div>

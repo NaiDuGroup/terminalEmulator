@@ -21,20 +21,20 @@ export class HelpService {
       event.next({ line: "Get current weather measurements by city name:" });
       event.next({ line: "        weather <cityName>" });
       event.next({ line: " " });
-    }, 300);
+    }, 1000);
 
     setTimeout(() => {
       event.next({ line: "Clear the screen:" });
       event.next({ line: "        clear" });
       event.next({ line: " " });
-    }, 400);
+    }, 2000);
 
     setTimeout(() => {
       event.next({ line: "Get help:" });
       event.next({ line: "        help" });
       event.next({ line: " " });
       event.complete();
-    }, 500);
+    }, 3000);
 
     return event.asObservable();
     

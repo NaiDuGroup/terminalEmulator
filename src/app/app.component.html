@@ -1,7 +1,31 @@
-<!-- <div class="container"> -->
-<div>
-    <app-terminal-entity [sessionNum] = "1"></app-terminal-entity>
-    <!-- <app-terminal-entity [sessionNum] = "2"></app-terminal-entity> -->
-    <!-- <app-terminal-entity [sessionNum] = "3"></app-terminal-entity> -->
-    <!-- <app-terminal-entity [sessionNum] = "3"></app-terminal-entity> -->
-</div>  
+<div class="container">
+  <div class="container__buttons">
+    <button [disabled]="count == 4" class="container__buttons--btn" (click)="addTerminal()">Add Terminal</button>
+    <button [disabled]="count == 1" class="container__buttons--btn" (click)="deleteTerminal()">Close Terminal</button>
+  </div>
+
+  <div *ngIf="count == 1" class="container__terminals">
+    <app-terminal-entity class="container__terminals--entity" [sessionNum]=1></app-terminal-entity>
+  </div>
+
+  <div *ngIf="count == 2" class="container__terminals">
+    <app-terminal-entity class="container__terminals--entity" [sessionNum]=1></app-terminal-entity>
+    <app-terminal-entity class="container__terminals--entity" [sessionNum]=2></app-terminal-entity>
+  </div>
+
+
+  <div *ngIf="count == 3" class="container__terminals">
+    <app-terminal-entity class="container__terminals--entity" [sessionNum]=1></app-terminal-entity>
+    <app-terminal-entity class="container__terminals--entity" [sessionNum]=2></app-terminal-entity>
+    <app-terminal-entity class="container__terminals--entity" [sessionNum]=3></app-terminal-entity>
+
+  </div>
+
+  <div *ngIf="count == 4" class="container__terminals">
+    <app-terminal-entity class="container__terminals--entity" [sessionNum]=1></app-terminal-entity>
+    <app-terminal-entity class="container__terminals--entity" [sessionNum]=2></app-terminal-entity>
+    <app-terminal-entity class="container__terminals--entity" [sessionNum]=3></app-terminal-entity>
+    <app-terminal-entity class="container__terminals--entity" [sessionNum]=4></app-terminal-entity>
+  </div>
+
+</div>

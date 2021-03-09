@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 import { HelpService, WeatherService } from '../../servicies';
 
@@ -10,8 +11,8 @@ import { HelpService, WeatherService } from '../../servicies';
 })
 export class TerminalEntityComponent implements OnInit, AfterViewInit {
   @Input() sessionNum: number;
-  @ViewChildren('output') private _output: QueryList<any>;
-  @ViewChild('content') private _content: ElementRef;
+  @ViewChildren("output") private _output: QueryList<any>;
+  @ViewChild("content") private _content: ElementRef;
 
   userName: string = "kivork@kivork-2021";
 
@@ -30,7 +31,9 @@ export class TerminalEntityComponent implements OnInit, AfterViewInit {
   commandsHistory: string[] = [];
   counterForCommandHistory: number = 0;
 
-  _isCommandInProgress: boolean = false;
+  isCommandInProgress: boolean = false;
+
+  private _colors: string[] = ["red","black","blue","green","orange"];
   
   constructor(
     private _weatherService: WeatherService,
@@ -48,6 +51,9 @@ export class TerminalEntityComponent implements OnInit, AfterViewInit {
     this.output.push(" ");
     this.output.push("Get help:");
     this.output.push("        help");
+
+    // Used to get random color of the Terminal, in case it is not stored in SessionStore
+    this.preferences.backgroundColor = this._colors[Math.floor(Math.random() * Math.floor(5))];
   }
 
   ngOnInit(): void {
@@ -83,6 +89,7 @@ export class TerminalEntityComponent implements OnInit, AfterViewInit {
   }
 
   mouseEvent(event: MouseEvent): void {
+     document.getElementById(`input${this.sessionNum}`).focus();
     event.preventDefault();
   }
 
@@ -116,10 +123,10 @@ export class TerminalEntityComponent implements OnInit, AfterViewInit {
 }
 
   private _handleCommand(): void {
-    if (this._isCommandInProgress) return;
+    if (this.isCommandInProgress) return;
     if (!this.stackOfCommands.length) return;
     
-    this._isCommandInProgress = true;
+    this.isCommandInProgress = true;
     const action = this.stackOfCommands.shift();
 
     this._writeToOutput({ line: `${this.userName}:~$ ${action}` });
@@ -134,14 +141,14 @@ export class TerminalEntityComponent implements OnInit, AfterViewInit {
             (line: any) => this._writeToOutput(line),
             () => {},
             () => {
-              this._isCommandInProgress = false;
+              this.isCommandInProgress = false;
               this._handleCommand();
             } 
           );
           break;
         case "clear":
           this.output = [];
-          this._isCommandInProgress = false;
+          this.isCommandInProgress = false;
           this._handleCommand();
           break;
         case "help":
@@ -149,18 +156,18 @@ export class TerminalEntityComponent implements OnInit, AfterViewInit {
             (line: any) => this._writeToOutput(line),
             () => {},
             () => {
-              this._isCommandInProgress = false;
+              this.isCommandInProgress = false;
               this._handleCommand();
             }
           );
           break;
         default:
           this.output.push(action + ": Command not found");
-          this._isCommandInProgress = false;
+          this.isCommandInProgress = false;
           this._handleCommand();
       }
     } else {
-      this._isCommandInProgress = false;
+      this.isCommandInProgress = false;
       this._handleCommand();
     }
   }
@@ -214,53 +221,27 @@ export class TerminalEntityComponent implements OnInit, AfterViewInit {
 
   setCaretColor(color: string): void {
     this.preferences.cursor = color;
-    document.getElementById('input').style.caretColor = this.preferences.cursor;
     this._saveToSessionStorage();
   }
 
   setBgColor(color: string): void {
     this.preferences.backgroundColor = color;
-    document.getElementById('body').style.backgroundColor = color;
-    document.getElementById('input').style.backgroundColor = color;
     this._saveToSessionStorage();
   }
 
   setTextColor(color: string): void {
     this.preferences.textColor = color;
-
-    const spans = document.getElementsByClassName('output') as HTMLCollectionOf < HTMLElement > ;
-    for (let i = 0; i < spans.length; i++) {
-      spans[i].style.color = this.preferences.textColor;
-    }
-
-    const symbols = document.getElementsByClassName('body-input--symbols') as HTMLCollectionOf < HTMLElement > ;
-    for (let i = 0; i < symbols.length; i++) {
-      symbols[i].style.color = this.preferences.textColor;
-    }
-
-    document.getElementById('input').style.color = this.preferences.textColor;
     this._saveToSessionStorage();
   }
 
   setTextSize(cmd ? : string): void {
+
     if (cmd == "-" && this.preferences.textSize > 10) {
-      this.preferences.textSize--;
+      this.preferences.textSize -= 1;
     }
     if (cmd == "+" && this.preferences.textSize < 40) {
-      this.preferences.textSize++;
+      this.preferences.textSize += 1;
     }
-
-    const spans = document.getElementsByClassName('output') as HTMLCollectionOf < HTMLElement > ;
-    for (let i = 0; i < spans.length; i++) {
-      spans[i].style.fontSize = this.preferences.textSize + "px";
-    }
-
-    const symbols = document.getElementsByClassName('body-input--symbols') as HTMLCollectionOf < HTMLElement > ;
-    for (let i = 0; i < symbols.length; i++) {
-      symbols[i].style.fontSize = this.preferences.textSize + "px";
-    }
-    document.getElementById('input').style.fontSize = this.preferences.textSize + "px";
-    document.getElementById('root').style.fontSize = this.preferences.textSize + "px";
 
     this._saveToSessionStorage();
   }
